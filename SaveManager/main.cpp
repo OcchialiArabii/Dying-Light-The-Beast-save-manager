@@ -1,8 +1,12 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <iostream>
 #include <fstream>
 #include <filesystem>
 #include <string>
 #include <windows.h>
+#include <ctime>
+
 
 using namespace std;
 using namespace std::filesystem;
@@ -20,7 +24,10 @@ int main() {
 	{
 		ofstream file("settings.txt");
 		if (file.is_open()) {
-			file << "C:/Program Files (x86)/Steam/userdata/3008130/remote/out/save" << endl;
+			cout << "Enter path to save files [Basic: C:/Program Files (x86)/Steam/userdata/[User_ID]/3008130/remote/out/]" << endl;
+			string path;
+			cin >> path;
+			file << path << endl;
 			file << 60 << endl;
 		}
 		file.close();
@@ -38,7 +45,7 @@ int main() {
 
 		switch (choose) {
 		case 1:
-
+		{
 			ifstream file("settings.txt");
 			string path;
 			getline(file, path);
@@ -46,12 +53,19 @@ int main() {
 			getline(file, timerS);
 			int timer = stoi(timerS);
 			file.close();
-
-			saving(timer,path);
-
+			saving(timer, path);
+			break;
 		}
+		case 2:
+			break;
 
+		case 3:
+			break;
 
+		case 4:
+			return 0;
+			break;
+		}
 	}
 	
 	return 0;
@@ -66,9 +80,14 @@ void saving(int timer, string path) {
 	while (true) {
 		if (tempTime == timer)
 		{
-
+			copy(path+"/save", path + "/backups/save");
+			string timeS = to_string(time(0));
+			rename(path + "/backups/save", path + "/backups/" + timeS);
+			return;
 		}
-		return;
+		tempTime++;
+		cout << tempTime << endl;
+		Sleep(1000);
 	}
 
 
